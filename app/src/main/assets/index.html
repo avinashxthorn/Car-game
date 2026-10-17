@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#112822"><title>Saini Drive</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<canvas id="game" aria-label="3D countryside driving game"></canvas><div id="vignette"></div><div id="speedLines"></div><div id="flash"></div>
+<div id="splash"><div class="studio-mark"><span></span><span></span><span></span></div><p>Made by <b>Saini</b></p><small>A LITTLE ESCAPE. A GREAT DRIVE.</small><div class="loading-line"></div></div>
+<main id="home" class="screen hidden">
+  <div class="eyebrow"><span class="green-dot"></span> THE OPEN ROAD IS YOURS</div>
+  <h1>SAINI<span>DRIVE<span class="title-dot">.</span></span></h1>
+  <p class="tagline">Find your flow.<br>Lose yourself in the green.</p>
+  <div class="mode-selector"><button data-mode="cruise" class="selected"><b>FREE DRIVE</b><small>No clock. Just the road.</small></button><button data-mode="sprint"><b>3 KM SPRINT</b><small>Beat the 150-second clock.</small></button></div>
+  <div class="home-actions"><button id="start" class="primary">LET’S DRIVE <span>↗</span></button><button id="settingsOpen" class="square" aria-label="Settings">⚙</button></div>
+  <div class="home-foot"><span>OFFLINE • LANDSCAPE • 3D</span><span id="best">BEST 0 KM</span></div>
+  <div class="car-picker"><span>YOUR COLOUR</span><button data-color="#b8e66b" style="--swatch:#b8e66b" class="selected" aria-label="Lime car"></button><button data-color="#35c7bb" style="--swatch:#35c7bb" aria-label="Teal car"></button><button data-color="#ff775d" style="--swatch:#ff775d" aria-label="Coral car"></button><button data-color="#e9e5dc" style="--swatch:#e9e5dc" aria-label="White car"></button></div>
+  <div class="scene-tag"><i></i><span>GREEN VALLEY<small>WINDING ROADS / OPEN SKIES</small></span></div>
+</main>
+<div id="hud" class="hidden">
+  <div class="top-left"><div class="wordmark">SAINI <b>DRIVE</b><span> / </span><small id="modeLabel">FREE DRIVE</small></div><div class="journey"><span id="distance">0.00<small> KM</small></span><div><span id="score">0</span><small> DRIVE POINTS</small></div></div></div>
+  <div id="mission" class="hidden"><span>3 KM SPRINT</span><strong id="time">2:30</strong><div><i id="progress"></i></div></div>
+  <div class="top-right"><button id="camera" class="icon" aria-label="Change camera"><svg viewBox="0 0 24 24"><path d="M4 7h4l2-3h4l2 3h4v13H4Z"/><circle cx="12" cy="13" r="4"/></svg></button><button id="pause" class="icon" aria-label="Pause"><svg viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg></button></div>
+  <div class="map-panel"><canvas id="minimap" width="140" height="140"></canvas><span>GREEN VALLEY</span></div>
+  <div id="hint">Hold the accelerator. Drag the wheel to steer.</div><div id="notice"></div>
+  <div class="speedometer"><div class="speed-reading"><strong id="speed">0</strong><span>KM/H</span><em id="gear">N</em></div><div class="rpm"><i id="rpm"></i></div><div class="nitro-meter"><span>NITRO</span><div><i id="nitroFill"></i></div></div></div>
+  <div id="controls">
+    <div id="wheelZone"><div id="wheel"><svg viewBox="0 0 180 180"><circle cx="90" cy="90" r="73"/><path d="M17 85H63L79 100L79 160M163 85H117L101 100V160"/><circle class="hub" cx="90" cy="90" r="25"/><path class="mark" d="M90 17V30"/></svg><span>S</span></div></div>
+    <div id="arrows" class="hidden"><button id="left" class="arrow" aria-label="Steer left">‹</button><button id="right" class="arrow" aria-label="Steer right">›</button></div>
+    <div id="tiltHint" class="hidden">TILT TO STEER<button id="calibrate">CENTRE</button></div>
+    <div class="pedals"><button id="boost" aria-label="Nitro boost"><svg viewBox="0 0 24 24"><path d="M13 2L5 14H11L10 22L19 9H13Z"/></svg><span>NITRO</span></button><button id="brake" aria-label="Brake"><i></i><i></i><span>BRAKE</span></button><button id="gas" aria-label="Accelerator"><i></i><i></i><i></i><span>GAS</span></button></div>
+  </div>
+</div>
+<section id="pauseScreen" class="overlay hidden"><div class="dialog"><div class="eyebrow">TAKE A BREATHER</div><h2>Enjoy the view.</h2><p>Your drive is paused.</p><button id="resume" class="primary">BACK TO THE ROAD <span>↗</span></button><div class="button-row"><button id="pauseSettings">CONTROLS</button><button id="restart">RESTART</button><button id="quit">HOME</button></div></div></section>
+<section id="settings" class="overlay hidden"><div class="dialog settings-dialog"><div class="dialog-head"><div><div class="eyebrow">MAKE IT YOURS</div><h2>Driving setup</h2></div><button id="settingsClose" class="square" aria-label="Close settings">×</button></div>
+  <label>Steering<select id="steeringMode"><option value="wheel">Touch steering wheel</option><option value="arrows">Left / right buttons</option><option value="tilt">Tilt your phone</option></select></label>
+  <label>Steering sensitivity<input id="sensitivity" type="range" min="0.5" max="1.6" step="0.1" value="1"></label>
+  <label>Automatic acceleration<input id="autoGas" type="checkbox"></label><label>Engine sound<input id="sound" type="checkbox" checked></label><label>Vibration<input id="haptics" type="checkbox" checked></label>
+  <label>Graphics<select id="quality"><option value="high">High · shadows + detail</option><option value="low">Smooth · save battery</option></select></label><label>Light<select id="daylight"><option value="day">Clear morning</option><option value="golden">Golden hour</option></select></label><p class="settings-help">Use both thumbs: steer on the left, pedals on the right.<br>Keyboard: WASD / arrows · Space = nitro · C = camera · Esc = pause.</p>
+</div></section>
+<section id="results" class="overlay hidden"><div class="dialog"><div class="eyebrow" id="resultLabel">DRIVE COMPLETE</div><h2 id="resultTitle">What a drive.</h2><div class="result-stats"><div><strong id="resultDistance"></strong><span>DISTANCE</span></div><div><strong id="resultScore"></strong><span>POINTS</span></div><div><strong id="resultTime"></strong><span>TIME</span></div></div><button id="again" class="primary">ONE MORE DRIVE <span>↗</span></button><button id="resultHome" class="text-button">BACK HOME</button></div></section>
+<div id="rotate"><div>↻</div><h2>Turn your phone</h2><p>The open road looks better in landscape.</p></div>
+<div id="error" class="overlay hidden"><div class="dialog"><h2>Let’s get you driving.</h2><p id="errorText">This game needs WebGL 2. Update Android System WebView and reopen the game.</p><button class="primary" onclick="location.reload()">TRY AGAIN</button></div></div>
+<script type="module" src="game.mjs"></script></body></html>

@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {tick,newDrive,impact,route} from '../app/src/main/assets/physics.mjs';
+const run=(s,input,seconds)=>{for(let i=0;i<seconds*60;i++)tick(s,input,1/60);};
+test('accelerator moves forward, braking stops without reverse',()=>{const s=newDrive();run(s,{gas:true},4);assert(s.speed>20);assert(s.distance>45);run(s,{brake:true},3);assert.equal(s.speed,0);});
+test('simultaneous pedals give brake priority',()=>{const s=newDrive();run(s,{gas:true},3);const speed=s.speed;run(s,{gas:true,brake:true},1);assert(s.speed<speed);assert.equal(s.boosting,false);});
+test('touch steering works in both directions and releases smoothly',()=>{const l=newDrive(),r=newDrive();run(l,{gas:true,steer:-1},2);run(r,{gas:true,steer:1},2);assert(l.lateral<-3);assert(r.lateral>-1);run(r,{gas:true,steer:0},1);assert(Math.abs(r.steer)<.001);});
+test('nitro consumes charge, adds speed, and recharges',()=>{const s=newDrive();run(s,{gas:true},4);let n=s.nitro;run(s,{gas:true,boost:true},1);assert(s.nitro<n);assert(s.boosting);n=s.nitro;run(s,{gas:true},2);assert(s.nitro>n);});
+test('offroad slows the car and has finite boundaries',()=>{const s=newDrive();s.speed=40;s.lateral=8;run(s,{gas:true,steer:1},3);assert(s.speed<40);assert(Math.abs(s.lateral)<=10);});
+test('collision cooldown prevents one contact consuming all health',()=>{const s=newDrive();s.speed=50;assert(impact(s));assert.equal(s.health,78);assert.equal(s.speed,17.5);assert(!impact(s));assert.equal(s.health,78);});
+test('sprint success and timeout both stop simulation',()=>{const s=newDrive('sprint');s.distance=2999;s.speed=50;run(s,{gas:true},.1);assert(s.finished&&s.won);const d=s.distance;run(s,{gas:true},5);assert.equal(d,s.distance);const t=newDrive('sprint');t.remaining=.03;run(t,{},1);assert(t.finished&&!t.won);});
+test('route stays continuous across streaming boundaries',()=>{for(let s=0;s<20000;s+=120){const a=route(s-.001),b=route(s+.001);assert(Math.abs(a.x-b.x)<.003);assert(Math.abs(a.y-b.y)<.001);assert(Number.isFinite(a.yaw));}});
+test('a background stall is clamped to avoid teleporting',()=>{const s=newDrive();s.speed=50;tick(s,{gas:true},20);assert(s.distance<4);});
