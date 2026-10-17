@@ -6,6 +6,5 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">#101e1b</item>
         <item name="android:colorAccent">#c2f466</item>
-        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
     </style>
 </resources>

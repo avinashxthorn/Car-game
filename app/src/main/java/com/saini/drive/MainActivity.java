@@ -3,6 +3,7 @@ package com.saini.drive;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.hardware.Sensor;
@@ -34,6 +35,11 @@ public class MainActivity extends Activity implements SensorEventListener {
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        if (Build.VERSION.SDK_INT >= 28) {
+            WindowManager.LayoutParams layout = getWindow().getAttributes();
+            layout.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+            getWindow().setAttributes(layout);
+        }
         immersive();
         sensors = (SensorManager) getSystemService(SENSOR_SERVICE);
         accelerometer = sensors.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
