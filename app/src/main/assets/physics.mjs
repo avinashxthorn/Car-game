@@ -23,8 +23,8 @@ export function tick(state, input, dt) {
   state.steer += (clamp(input.steer || 0, -1, 1) - state.steer) * (1 - Math.exp(-dt * 9));
   const offroad = Math.abs(state.lateral) > 5.1;
   const drag = .65 + .0028 * state.speed * state.speed + (offroad ? 9 : 0);
-  const accel = gas ? (state.boosting ? 19 : 11) : 0;
-  state.speed = clamp(state.speed + (accel - drag - (brake ? 26 : 0)) * dt, 0, state.boosting ? 68 : 54);
+  const accel = gas ? (state.boosting ? 19 : state.speed < 54 ? 11 : 0) : 0;
+  state.speed = clamp(state.speed + (accel - drag - (brake ? 26 : 0)) * dt, 0, 68);
   const path = route(state.s);
   state.lateral += (state.steer * (2.5 + state.speed * .14) - path.curve * state.speed * state.speed * .23) * dt * Math.min(1, state.speed / 3);
   if (Math.abs(state.lateral) > 10) {
